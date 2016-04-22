@@ -1,0 +1,16 @@
+{
+  "name": "firebase-test",
+  "version": "0.0.0",
+  "authors": [
+    "Brandon <brogers4@gmail.com>"
+  ],
+  "description": "Firebase Test",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
