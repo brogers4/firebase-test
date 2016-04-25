@@ -2,6 +2,9 @@
 
 <dom-module id="widgets-view">
   <style>
+    :host {
+      margin: 10px;
+    }
     :host .widget-details {
       background: #eee;
       padding: 10px;
@@ -12,6 +15,7 @@
     <div id="firebaseStore">
       <firebase-document location="https://br-firebase-test.firebaseio.com/widgets" data="{{_widgets}}"></firebase-document>
       <firebase-document location="https://br-firebase-test.firebaseio.com/widgets/1" data="{{_widgetOne}}"></firebase-document>
+      <!-- <firebase-document-readonly location="https://br-firebase-test.firebaseio.com/widgets/1" data="{{_widgetOne}}"></firebase-document-readonly> -->
       <firebase-document location="[[_computeSelectedWidgetLocation(_selectedWidgetId)]]" data="{{_selectedWidget}}"></firebase-document>
       <template is="dom-repeat" items="{{_documents}}" as="document">
         <firebase-document location="{{document.location}}" data="{{document.data}}"></firebase-document>
