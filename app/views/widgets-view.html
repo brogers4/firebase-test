@@ -1,0 +1,119 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="widgets-view">
+  <style>
+    :host .widget-details {
+      background: #eee;
+      padding: 10px;
+      margin: 10px;
+    }
+  </style>
+  <template>
+    <div id="firebaseStore">
+      <firebase-document location="https://br-firebase-test.firebaseio.com/widgets" data="{{_widgets}}"></firebase-document>
+      <firebase-document location="https://br-firebase-test.firebaseio.com/widgets/1" data="{{_widgetOne}}"></firebase-document>
+      <firebase-document location="[[_computeSelectedWidgetLocation(_selectedWidgetId)]]" data="{{_selectedWidget}}"></firebase-document>
+      <templatae is="dom-repeat" items="{{_documents}}" as="document">
+        <firebase-document location="[[_computeSelectedWidgetLocation(document.id)]]" data="{{document.data}}"></firebase-document>
+      </templatae>
+    </div>
+    <h1>Widgets View</h1>
+    <ul>
+      <template is="dom-repeat" items="{{_widgetArray}}" as="widget">
+        <li>
+          <a href$="/widgets/{{widget.key}}">{{widget.key}}: {{widget.value.name}}</a>
+          <button widget-id$="{{widget.key}}" on-click="onDetails">Details</button>
+          <button widget-id$="{{widget.key}}" on-click="onAdd">Add</button>
+        </li>
+      </template>
+    </ul>
+    <div class="widget-details">
+      <h3>Widget 1 Details</h3>
+      <div>
+        <span>Widget Name: </span><span>{{_widgetOne.name}}</span>
+      </div>
+      <div>
+        <span>Widget Description: </span><span>{{_widgetOne.description}}</span>
+      </div>
+    </div>
+    <div class="widget-details">
+      <h3>Selected Widget Details</h3>
+      <div>
+        <span>Widget Name: </span><span>{{_selectedWidget.name}}</span>
+      </div>
+      <div>
+        <span>Widget Description: </span><span>{{_selectedWidget.description}}</span>
+      </div>
+    </div>
+    <div class="widget-details">
+      <h3>Added Widget Details</h3>
+      <template is="dom-repeat" items="{{_documents}}" as="document">
+        <div>
+          <span>Widget ID: </span><span>{{document.id}}</span>
+        </div>
+        <div>
+          <span>Widget Name: </span><span>{{document.data.name}}</span>
+        </div>
+        <div>
+          <span>Widget Description: </span><span>{{document.data.description}}</span>
+        </div>
+        <br>
+      </template>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'widgets-view',
+      properties: {
+        _widgets: {
+          type: Object
+        },
+        _widgetArray: {
+          type: Array,
+          computed: '_computeWidgetArray(_widgets)'
+        },
+        _selectedWidgetId: {
+          type: String
+        },
+        _selectedWidget: {
+          type: Object
+        },
+        _documents: {
+          type: Array,
+          value: [],
+          notify: true
+        }
+      },
+
+      observers: [
+        '_observeDocuments(_documents.*)'
+      ],
+
+      _computeWidgetArray: function(_widgets) {
+        console.log("_computeWidgetArray: ",_widgets);
+        var array = Object.keys(_widgets).map(function(key){
+          return {key: key, value: _widgets[key]};
+        });
+        console.log("_computeWidgetArray array: ",array);
+        return array;
+      },
+      _computeSelectedWidgetLocation: function(_selectedWidgetId) {
+        return "https://br-firebase-test.firebaseio.com/widgets/"+_selectedWidgetId;
+      },
+      onDetails: function(event) {
+        console.log("onDetails event.target.widgetId: ",event.target.getAttribute('widget-id'));
+        var id = event.target.getAttribute('widget-id');
+        this.set('_selectedWidgetId',id);
+      },
+      onAdd: function(event) {
+        var id = event.target.getAttribute('widget-id');
+        var newDocument = {id: id, location: "https://br-firebase-test.firebaseio.com/widgets/"+id};
+        this.push('_documents',newDocument);
+        console.log("onAdd documents: ",this.get('_documents'));
+      },
+      _observeDocuments: function(change){
+        console.log("_observeDocuments change: ",change);
+      }
+    })
+  </script>
+</dom-module>

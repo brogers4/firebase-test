@@ -1,0 +1,56 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="widget-view">
+  <style>
+  </style>
+  <template>
+    <div id="fbDatastore">
+      <firebase-document location="[[_computeWidgetLocation(widgetId)]]" data="{{_widget}}"></firebase-document>
+    </div>
+
+    <h1>{{_widget.name}}</h1>
+    <h3>{{_widget.description}}</h3>
+  </template>
+  <script>
+    Polymer({
+      is: 'widget-view',
+      properties: {
+        params: {
+          type: Object
+        },
+        widgetId: {
+          type: String,
+          observer: '_observeWidgetId'
+        },
+        _widget: {
+          type: Object
+        }
+      },
+
+      observers: [
+        '_observeParams(params.*)'
+      ],
+
+      _observeParams: function(change) {
+        console.log("_observeParams change: ",change);
+        if(change && change.path == 'params' && change.value && change.value.widget){
+          this.set('widgetId',change.value.widget);
+        } else {
+          console.warn("Invalid parameters provided to Widget View: ",change);
+        }
+      },
+
+      _observeWidgetId: function(newVal,oldVal){
+        if(newVal){
+          console.log("_observeWidgetId: ",newVal);
+        }
+      },
+
+      _computeWidgetLocation: function(widgetId){
+        if(widgetId){
+          return "https://br-firebase-test.firebaseio.com/widgets/"+widgetId;
+        }
+      }
+    })
+  </script>
+</dom-module>

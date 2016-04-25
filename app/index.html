@@ -1,7 +1,71 @@
+<!doctype html>
 <html>
+<head>
+  <title>Firebase Test</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="bower_components/page/page.js"></script>
+
+  <link rel="import" href="elements/elements.html">
+
+  <link rel="stylesheet" href="css/main.css">
+
+  <style is="custom-style" include="shared-styles"></style>
+</head>
 <body>
-  <p>
-    Hello, World!
-  </p>
+  <template id="app" is="dom-bind">
+    <paper-drawer-panel id="paperDrawerPanel">
+      <paper-scroll-header-panel drawer fixed>
+        <paper-toolbar id="drawerToolbar">
+          <span class="menu-name">Menu</span>
+        </paper-toolbar>
+        <paper-menu class="app-menu" attr-for-selected="data-route" selected="[[route]]">
+          <a data-route="home" href="/">
+            <iron-icon icon="home"></iron-icon>
+            <span>Home</span>
+          </a>
+          <a data-route="widgets" href="/widgets">
+            <iron-icon icon="apps"></iron-icon>
+            <span>Widgets</span>
+          </a>
+        </paper-menu>
+      </paper-scroll-header-panel>
+
+      <paper-scroll-header-panel id="headerPanelMain" main condenses keep-condensed-header>
+        <paper-toolbar id="mainToolbar" class="tall">
+          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+          <span class="space"></span>
+          <div class="middle middle-container">
+            <div class="app-name">
+              Widget App
+            </div>
+          </div>
+          <div class="bottom bottom-container">
+            <div class="bottom-title">
+              The future of widgets today!
+            </div>
+          </div>
+        </paper-toolbar>
+
+        <div class="content">
+          <iron-pages attr-for-selected="data-route" selected="{{route}}">
+            <section data-route="home">
+              <home-view></home-view>
+            </section>
+            <section data-route="widgets">
+              <widgets-view></widgets-view>
+            </section>
+            <section data-route="widget">
+              <widget-view></widget-view>
+            </section>
+          </iron-pages>
+        </div>
+      </paper-scroll-header-panel>
+    </paper-drawer-panel>
+  </template>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
